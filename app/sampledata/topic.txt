@@ -1,0 +1,43 @@
+Zing Mp3 #Chart
+Simple Music Chart Player
+
+# Requirements: Let’s build a simple music player using Flutter
+
+App Name : #zingChart
+
+The Main Screen Allows users to view the list of songs on zingchart https://m.zingmp3.vn/zing-chart.
+Each song in the list will display: Rank, album cover, song title, artist name
+When a song is selected, it will start playing.
+Having a progress bar that shows the currently playing song, along with the song title, artist name, and album cover.
+There are play, pause and stop buttons to control.
+There is a search bar to filter songs by title or artist name.
+Playing music in the background so that the music continues to play even when the screen is off or another application is open.
+
+
+
+[ ]  Allows users to view the list of songs on zingchart https://m.zingmp3.vn/zing-chart.
+[ ]  Each song in the list will show: song title, artist name and album cover.
+[ ]  When a song is selected, it will start playing.
+[ ]  There is a progress bar that shows the currently playing song, along with the song title, artist name, and album art.
+[ ]  There are play, pause and stop buttons to control.
+[ ]  There is a search bar to filter songs by title or artist name.
+[ ]  Play music in the background so that it continues to play even when the screen is off or another application is open.
+
+
+Use these Lib
+
+audioplayers
+ json_annotation
+ retrofit
+ retrofit_generator
+ cupertino_icons
+ build_runner
+
+# API Chart : https://mp3.zing.vn/xhr/chart-realtime?songId=0&videoId=0&albumId=0&chart=song&time=-1
+
+# API Song : https://m.zingmp3.vn/xhr/media/get-source?type=audio&key= {“code” from API Chart }
+https://m.zingmp3.vn/xhr/media/get-source?type=audio&key=(Seach Querry)
+# API Seach :
+
+# Play Song :http://api.mp3.zing.vn/api/streaming/audio/{“id” from API Song or API Seach }/128
+m.zingmp3.vn

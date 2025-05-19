@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">ZingPlayer</string>
+    <string name="general_err">Something error, please try again later</string>
+    <string name="filter_by_name_or_artist">Type here to filter songs by name or artist</string>
+    <string name="zing_chart">Zing chart</string>
+    <string name="albums">Albums</string>
+    <string name="songs">Songs</string>
+</resources>

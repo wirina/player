@@ -29,7 +29,10 @@ class HomeScreenViewModel: ViewModel(), KoinComponent {
     private var refreshSongJob: Job? = null
     private val errorHandler = CoroutineExceptionHandler { _,  throwable->
         Log.d(TAG, "error ${throwable.message}", throwable)
-        viewModelScope.launch { _error.emit(Unit) }
+        viewModelScope.launch {
+            _error.emit(Unit)
+            _isRefreshing.emit(false)
+        }
     }
     private var filterJob: Job? = null
     private val _filterStr = MutableStateFlow("")

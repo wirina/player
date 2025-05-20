@@ -23,11 +23,15 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults.Indicator
+import androidx.compose.material3.pulltorefresh.PullToRefreshState
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -53,6 +57,7 @@ fun HomeScreen(
     val errorMessage = stringResource(R.string.general_err)
     val filter by viewModel.filterStr.collectAsState()
     val isRefreshing by viewModel.isRefreshing.collectAsState()
+    val state: PullToRefreshState = rememberPullToRefreshState()
 
     Scaffold(
         topBar = {
@@ -83,7 +88,15 @@ fun HomeScreen(
                 onRefresh = {
                     viewModel.refreshSongs()
                 },
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier.fillMaxSize(),
+                indicator = {
+                    Indicator(
+                        modifier = Modifier.align(Alignment.Center),
+                        isRefreshing = isRefreshing,
+                        state = state
+                    )
+                },
+                state = state
             ) {
                 Column {
                     Text(

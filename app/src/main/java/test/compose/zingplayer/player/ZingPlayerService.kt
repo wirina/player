@@ -11,14 +11,17 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.app.ServiceCompat
 import test.compose.zingplayer.R
+import test.compose.zingplayer.model.Song
 
 class ZingPlayerService: Service() {
     private val player by lazy { MediaPlayer() }
     private val binder by lazy { Binder(this) }
-
     private val channelID = "channelID"
     private val channelName = "channelName"
     private val notificationID = 100
+    private var song: Song? = null
+    private val songName: String get() = song?.title ?: "name"
+    private val artistName: String get() = song?.artistsNames ?: "artist"
 
     override fun onBind(intent: Intent?): IBinder? {
         return binder
@@ -34,7 +37,9 @@ class ZingPlayerService: Service() {
         player.release()
     }
 
-    fun setPlaySong(songUrl: String) {
+    fun setPlaySong(song: Song?, songUrl: String) {
+        this.song = song
+        updateNotification()
         player.reset()
         player.setDataSource(songUrl)
         player.prepare()
@@ -43,6 +48,7 @@ class ZingPlayerService: Service() {
 
     fun stop() {
         player.stop()
+        ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_REMOVE)
     }
 
     fun pause() {
@@ -70,14 +76,23 @@ class ZingPlayerService: Service() {
     }
 
     private fun startForeground() {
-        val channel = NotificationChannelCompat.Builder(channelID, NotificationManagerCompat.IMPORTANCE_DEFAULT)
+        val channel = NotificationChannelCompat.Builder(channelID, NotificationManagerCompat.IMPORTANCE_LOW)
             .setName(channelName)
+            .setSound(null, null)
+            .setVibrationEnabled(false)
+            .setLightsEnabled(false)
+            .setShowBadge(false)
             .build()
         NotificationManagerCompat.from(this).createNotificationChannel(channel)
+        updateNotification()
+    }
+
+    private fun updateNotification() {
         val notification = NotificationCompat.Builder(this, channelID)
-            .setContentTitle("a foreground service")
-            .setContentText("a foreground service")
+            .setContentTitle(songName)
+            .setContentText(artistName)
             .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setOngoing(true)
             .build()
         val serviceType = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK

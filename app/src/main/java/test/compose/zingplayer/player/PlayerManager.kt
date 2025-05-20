@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.os.IBinder
+import android.util.Log
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -39,12 +40,14 @@ class PlayerManager(
             name: ComponentName?,
             service: IBinder?
         ) {
+            debug { "onServiceConnected" }
             val zingPlayer = (service as? ZingPlayerService.Binder)?.getService()
             servicePlayer = zingPlayer
             playCurrentSong()
         }
 
         override fun onServiceDisconnected(name: ComponentName?) {
+            debug { "onServiceDisconnected" }
             reset()
         }
     }
@@ -60,6 +63,7 @@ class PlayerManager(
         }
         isPlayerRequested = true
         Intent(context, ZingPlayerService::class.java).let {
+            context.startForegroundService(it)
             context.bindService(it, connection, Context.BIND_AUTO_CREATE)
         }
     }
@@ -95,16 +99,25 @@ class PlayerManager(
 
     private fun playCurrentSong() {
         appScope.launch {
-            servicePlayer?.setPlaySong(songUrl = latestSongUrl)
+            servicePlayer?.setPlaySong(latestPlayingSong, latestSongUrl)
             _playingSong.emit(latestPlayingSong)
         }
     }
 
     private fun reset() {
+        debug { "reset service state" }
         servicePlayer = null
         isPlayerRequested = false
         appScope.launch {
             _playingSong.emit(null)
         }
+    }
+
+    private fun debug(message: () -> String) {
+        Log.d(TAG, message.invoke())
+    }
+
+    companion object {
+        private const val TAG = "PlayerManager"
     }
 }

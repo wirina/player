@@ -8,7 +8,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.SearchBarDefaults
@@ -23,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.isTraversalGroup
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.traversalIndex
+import androidx.navigation.NavController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -30,9 +35,10 @@ fun SimpleSearchBar(
     textFieldState: TextFieldState,
     onSearch: (String) -> Unit,
     searchResults: List<String>,
+    navController: NavController,
     modifier: Modifier = Modifier
 ) {
-    var expanded by rememberSaveable { mutableStateOf(false) }
+    var expanded by rememberSaveable { mutableStateOf(true) }
 
     Box(
         modifier
@@ -52,12 +58,21 @@ fun SimpleSearchBar(
                         expanded = false
                     },
                     expanded = expanded,
-                    onExpandedChange = { expanded = it },
-                    placeholder = { Text("Search") }
+                    onExpandedChange = {  },
+                    placeholder = { Text("Search") },
+                    leadingIcon = {
+                        IconButton(
+                            onClick = {
+                                navController.navigateUp()
+                            }
+                        ) {
+                            Icon(Icons.AutoMirrored.Default.ArrowBack, null)
+                        }
+                    }
                 )
             },
             expanded = expanded,
-            onExpandedChange = { expanded = it },
+            onExpandedChange = {  },
         ) {
             // Display search results in a scrollable column
             Column(Modifier.verticalScroll(rememberScrollState())) {

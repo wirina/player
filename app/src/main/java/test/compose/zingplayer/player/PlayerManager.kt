@@ -34,6 +34,13 @@ class PlayerManager(
     val totalSeconds get() = servicePlayer?.totalSeconds() ?: 1
     val isPlaying get() = servicePlayer?.isPlaying() == true
 
+    private val zingPlayerCallback = object : ZingPlayerCallback {
+        override fun onStop() {
+            appScope.launch {
+                _playingSong.emit(null)
+            }
+        }
+    }
     private var isPlayerRequested = false
     private val connection = object : ServiceConnection {
         override fun onServiceConnected(
@@ -43,6 +50,7 @@ class PlayerManager(
             debug { "onServiceConnected" }
             val zingPlayer = (service as? ZingPlayerService.Binder)?.getService()
             servicePlayer = zingPlayer
+            servicePlayer?.setCallback(callback = zingPlayerCallback)
             playCurrentSong()
         }
 
@@ -80,9 +88,6 @@ class PlayerManager(
 
     fun stop() {
         servicePlayer?.stop()
-        appScope.launch {
-            _playingSong.emit(null)
-        }
     }
 
     fun play() {

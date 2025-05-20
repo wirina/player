@@ -96,5 +96,7 @@ dependencies {
     androidTestImplementation(libs.androidx.navigation.testing)
     // constraintlayout
     implementation(libs.androidx.constraintlayout.compose)
-
+    // glance app widget
+    implementation(libs.androidx.glance.appwidget)
+    implementation(libs.androidx.glance.material3)
 }

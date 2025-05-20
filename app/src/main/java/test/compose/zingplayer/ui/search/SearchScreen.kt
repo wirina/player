@@ -15,12 +15,13 @@ fun SearchScreen(
     val textFieldState = rememberTextFieldState()
     Box(modifier = Modifier.fillMaxSize()) {
         SimpleSearchBar(
-            textFieldState,
+            textFieldState = textFieldState,
             onSearch = {
                 navController.popBackStack()
                 navController.navigate("search/any?query=$it")
             },
-            searchResults = emptyList()
+            searchResults = emptyList(),
+            navController = navController
         )
     }
 }

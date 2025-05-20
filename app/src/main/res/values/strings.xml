@@ -5,4 +5,6 @@
     <string name="zing_chart">Zing chart</string>
     <string name="albums">Albums</string>
     <string name="songs">Songs</string>
+    <string name="play_or_resume_music">play or resume music</string>
+    <string name="stop_playing_music">stop playing music</string>
 </resources>

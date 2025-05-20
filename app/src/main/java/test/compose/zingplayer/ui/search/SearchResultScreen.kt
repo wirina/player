@@ -3,6 +3,7 @@ package test.compose.zingplayer.ui.search
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -26,6 +27,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -93,7 +95,9 @@ fun SearchResultScreen(
                     style = MaterialTheme.typography.headlineMedium,
                     modifier = Modifier.fillMaxWidth()
                 )
-                LazyRow(modifier = Modifier.fillMaxWidth().padding(top = 4.dp)) {
+                LazyRow(modifier = Modifier.fillMaxWidth().padding(top = 4.dp)
+                    .height(dimensionResource(R.dimen.artist_search_height)),
+                ) {
                     items(artists) { artist ->
                         ArtistView(artist,
                             modifier = Modifier.padding(4.dp)) {
@@ -108,7 +112,6 @@ fun SearchResultScreen(
                 )
                 ConstraintLayout(modifier = Modifier.fillMaxSize().padding(top = 4.dp)) {
                     val (songsRef, playRef) = createRefs()
-
                     LazyColumn(modifier = Modifier.constrainAs(songsRef) {
                         top.linkTo(parent.top)
                         bottom.linkTo(playRef.top)
